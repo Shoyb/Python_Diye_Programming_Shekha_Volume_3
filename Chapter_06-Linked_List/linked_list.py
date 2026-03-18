@@ -1,0 +1,108 @@
+class Node:
+    def __init__(self, data = None, next = None):
+        self.data = data
+        self.next = next
+    
+    def __repr__(self):
+        return repr(self.data)
+
+class LinkedList:
+    def __init__(self):
+        self.head = Node()
+    
+    def __repr__(self):
+        nodes = []
+        current_node = self.head.next
+        
+        while current_node:
+            nodes.append(repr(current_node))
+            current_node = current_node.next
+
+        return ",".join(nodes)
+    
+    def prepend(self, data):
+        node = Node(data, self.head.next)
+        self.head.next = node
+
+    def append(self, data):
+        node = Node(data)
+        if self.head.next is None:
+            self.head.next = node
+            return
+        
+        current_node = self.head.next
+        
+        while current_node.next:
+            current_node = current_node.next
+        current_node.next = node
+
+    def search(self, item):
+        current_node = self.head.next
+        
+        while current_node:
+            if current_node.data == item:
+                return current_node
+            
+            current_node = current_node.next
+        
+        return None
+    
+    def remove(self, item):
+        previous_node = self.head
+        current_node = previous_node.next
+        
+        while current_node:
+            if current_node.data == item:
+                break
+            previous_node = current_node
+            current_node = current_node.next
+        
+        if current_node == None:
+            return None
+        
+        if self.head == previous_node:
+            self.head.next = current_node.next
+        else:
+            previous_node.next = current_node.next
+    
+    def insert(self, data, new_data):
+        current_node = self.head.next
+        
+        while current_node:
+            if current_node.data == data:
+                new_node = Node(new_data, current_node.next)
+                current_node.next = new_node
+                break
+            current_node = current_node.next
+            
+    def reverse(self):
+        prev = None
+        current_node = self.head.next
+        
+        while current_node:
+            current_node.next, prev, current_node = prev, current_node, current_node.next
+        
+        self.head.next = prev
+        
+    def insertion_sort(self):
+        sorted_head = None
+        current_node = self.head.next
+        
+        while current_node:
+            next_node = current_node.next
+            if not sorted_head or current_node.data < sorted_head.data:
+                current_node.next = sorted_head
+                sorted_head = current_node
+            else:
+                temp = sorted_head
+                while temp.next and temp.next.data < current_node.data:
+                    temp = temp.next
+                current_node.next = temp.next
+                temp.next = current_node
+                
+            current_node = next_node
+        
+        self.head.next = sorted_head
+        
+
+        
